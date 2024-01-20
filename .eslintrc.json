@@ -10,5 +10,7 @@
     "ecmaVersion": "latest"
   },
   "ignorePatterns": ["**/node_modules/*", "**/public/*"],
-  "rules": {}
+  "rules": {
+    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+  }
 }

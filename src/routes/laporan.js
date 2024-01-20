@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 const { request, response, Router } = require('express')
+const { logger } = require('../utils/logger')
 
 const LaporanRouter = Router()
 
-// http://localhost:4000/laporan
+// GET http://localhost:4000/laporan
 LaporanRouter.get('/', (request, response) => {
   response.status(200).send({
     status: true,
@@ -16,17 +17,10 @@ LaporanRouter.get('/', (request, response) => {
   })
 })
 
-// http://localhost:4000/edit
-LaporanRouter.get('/edit', (request, response) => {
-  response.status(200).send({
-    status: true,
-    statusCode: 200,
-    data: {
-      name: 'Rizky Mahendra',
-      email: 'Rizkymahendra@gmail.com',
-      message: 'coba diedit'
-    }
-  })
+// POST http://localhost:4000/laporan
+LaporanRouter.post('/', (request, response) => {
+  logger.info('Success post new Laporan')
+  response.status(200).send({ status: true, statusCode: '200', data: request.body })
 })
 
 module.exports = { LaporanRouter }
