@@ -4,7 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon ./src/index.js"
+    "dev": "npx nodemon ./src/index.js",
+    "format": "prettier --write .",
+    "prepare": "husky install",
+    "check-format": "prettier --check .",
+    "check-lint": "eslint . --ext js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged ng lint ng test",
+      "pre-push": "ng build --aot true"
+    }
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +25,15 @@
     "nodemon": "^3.0.3",
     "pino": "^8.17.2",
     "pino-pretty": "^10.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
+    "prettier": "3.2.4",
+    "pretty-quick": "^4.0.0"
   }
 }

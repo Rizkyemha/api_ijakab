@@ -1,0 +1,20 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo 'Styling, testing and building before commit'
+
+#check Prettier
+npm run check-format || 
+{
+    echo 'Prettier Failed !, Run npm run format add changes and try commit again'
+    false;
+}
+
+#check EsLint
+npm run check-lint || 
+{
+    echo 'Eslint check Failed !, Make the required changes listed above, add changes and try to commit again'
+    false;
+}
+
+echo 'Test Pre-Commit Success, you can push to repository'
