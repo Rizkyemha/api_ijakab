@@ -22,6 +22,7 @@ const getAuthUser = async (payload) => {
 const getUser = async (payload) => {
   const user = await userModel
     .findOne({ _id: new mongoose.Types.ObjectId(`${payload}`) })
+    .select('-password')
     .then((data) => {
       logger.info(`get admin profile success - ${payload}`)
       return data
