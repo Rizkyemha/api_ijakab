@@ -1,10 +1,12 @@
-const { HealthRouter } = require('./health')
-const { LaporanRouter } = require('./laporan')
+const { healthRouter } = require('./health')
+const { laporanRouter } = require('./laporan')
+const { userRouter } = require('./user')
 
 // router list
 const _routes = [
-  ['/health', HealthRouter],
-  ['/laporan', LaporanRouter]
+  ['/health', healthRouter],
+  ['/laporan', laporanRouter],
+  ['/user', userRouter]
 ]
 
 // router regis

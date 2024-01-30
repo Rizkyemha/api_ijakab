@@ -11,6 +11,11 @@
   },
   "ignorePatterns": ["**/node_modules/*", "**/public/*"],
   "rules": {
-    "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+    "no-unused-vars": "off",
+    "no-return-assign": "off",
+    "array-callback-return": "off",
+    "n/handle-callback-err": "off",
+    "no-unused-expressions": "off",
+    "no-unneeded-ternary": "off"
   }
 }

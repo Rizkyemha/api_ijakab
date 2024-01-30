@@ -5,6 +5,9 @@ const { logger } = require('./utils/logger')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+// connect DB
+const { connectDB } = require('./utils/connectDB.JS')
+
 const app = express()
 const port = CONFIG.PORT
 
