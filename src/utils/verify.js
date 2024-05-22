@@ -1,5 +1,6 @@
 const jose = require('jose')
 const { CONFIG } = require('../config')
+const { logger } = require('./logger')
 
 const token = async (payload) => {
   const secret = new TextEncoder().encode(CONFIG.SK)
@@ -17,11 +18,17 @@ const token = async (payload) => {
 }
 
 const auth = async (jwt, secret) => {
-  const { payload } = await jose.jwtVerify(jwt, secret, {
-    issuer: 'ijakab'
-  })
-  const _id = payload.sub.payload
-  return _id
+  try {
+    const { payload } = await jose.jwtVerify(jwt, secret, {
+      issuer: 'ijakab'
+    })
+    const _id = payload.sub.payload
+    logger.info('Auth Proccess - Success')
+    return _id
+  } catch (error) {
+    logger.info(`Auth Proccess - Failed | ${error.message}`)
+    return null
+  }
 }
 
 module.exports = { token, auth }

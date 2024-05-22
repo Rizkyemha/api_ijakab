@@ -1,10 +1,23 @@
 const { laporanModel } = require('../models/laporan.model')
 const { logger } = require('../utils/logger')
-const mongoose = require('mongoose')
+const { v4: uuidv4 } = require('uuid')
 
 const getLaporan = async () => {
   return await laporanModel
     .find()
+    .select('-_id')
+    .then((data) => {
+      return data
+    })
+    .catch((error) => {
+      logger.info('Data laporan not found')
+      return []
+    })
+}
+
+const getLaporanByUser = async () => {
+  return laporanModel
+    .find({ status: { $nin: ['awaiting approval', 'completed'] } })
     .then((data) => {
       return data
     })
@@ -16,33 +29,35 @@ const getLaporan = async () => {
 
 // insert for user - note, butuh handling error
 const insertLaporan = async (payload) => {
-  const { name, email, longtitude, latitude, message } = payload
+  const { name, location, email, longtitude, latitude, message, image } = payload
+  const laporan_id = uuidv4()
   return await laporanModel.create({
+    laporan_id,
     name,
+    location,
     email,
     longtitude,
     latitude,
     message,
-    isPending: true
+    status: 'awaiting approval', // awaiting approval, approved, in proses, completed
+    image
   })
 }
 
 const applyLaporan = async (payload, score) => {
-  const { _id, infrastucture, breakage } = await payload
-  const id = new mongoose.Types.ObjectId(_id)
-  console.log(_id, infrastucture, breakage, score)
+  const { laporan_id, infrastucture, breakage } = await payload
   await laporanModel.updateOne(
-    { _id: id },
+    { laporan_id },
     {
       infrastucture,
       breakage,
       score,
-      isPending: false,
-      isCompleted: false
+      status: 'approved'
     }
   )
   const laporan = await laporanModel
-    .findOne(id)
+    .findOne({ laporan_id })
+    .select('-_id')
     .then((data) => {
       return data
     })
@@ -54,18 +69,18 @@ const applyLaporan = async (payload, score) => {
   return laporan
 }
 
-const setProccessLaporan = async (payload) => {
-  const { _id, isCompleted } = await payload
-  const id = new mongoose.Types.ObjectId(_id)
+const setApproveLaporan = async (payload) => {
+  const { laporan_id } = await payload
 
   await laporanModel.updateOne(
-    { _id: id },
+    { laporan_id },
     {
-      isCompleted: isCompleted ? false : true
+      status: 'approved'
     }
   )
   const laporan = await laporanModel
-    .findOne(id)
+    .findOne({ laporan_id })
+    .select('-_id')
     .then((data) => {
       console.log('disini', data)
       return data
@@ -77,8 +92,79 @@ const setProccessLaporan = async (payload) => {
   return laporan
 }
 
-module.exports = { getLaporan, insertLaporan, applyLaporan, setProccessLaporan }
+const setProccessLaporan = async (payload) => {
+  const { laporan_id } = await payload
+
+  await laporanModel.updateOne(
+    { laporan_id },
+    {
+      status: 'in progress'
+    }
+  )
+  const laporan = await laporanModel
+    .findOne({ laporan_id })
+    .select('-_id')
+    .then((data) => {
+      console.log('disini', data)
+      return data
+    })
+    .catch((error) => {
+      logger.info('Data laporan not found')
+      return []
+    })
+  return laporan
+}
+
+const setFinishedLaporanServices = async (payload) => {
+  const { laporan_id } = await payload
+  const currentDate = new Date()
+
+  await laporanModel.updateOne(
+    { laporan_id },
+    {
+      status: 'finished',
+      completed_date: currentDate
+    }
+  )
+  const laporan = await laporanModel
+    .findOne({ laporan_id })
+    .select('-_id')
+    .then((data) => {
+      console.log('disini', data)
+      return data
+    })
+    .catch((error) => {
+      logger.info('Data laporan not found')
+      return []
+    })
+  return laporan
+}
+
+const deleteLaporanServices = async (payload) => {
+  try {
+    const { laporan_id } = await payload
+    await laporanModel.deleteOne({ laporan_id })
+    return true
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
+
+module.exports = {
+  getLaporan,
+  getLaporanByUser,
+  insertLaporan,
+  applyLaporan,
+  setProccessLaporan,
+  setApproveLaporan,
+  setFinishedLaporanServices,
+  deleteLaporanServices
+}
 module.getLaporan = getLaporan
+module.getLaporanByUser = getLaporanByUser
 module.insertLaporan = insertLaporan
 module.applyLaporan = applyLaporan
+module.setApproveLaporan = setApproveLaporan
 module.setProccessLaporan = setProccessLaporan
+module.setFinishedLaporanServices = setFinishedLaporanServices
+module.deleteLaporanServices = deleteLaporanServices

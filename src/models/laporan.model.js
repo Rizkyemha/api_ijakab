@@ -9,6 +9,9 @@ const laporanSchema = new mongoose.Schema(
     name: {
       type: String
     },
+    location: {
+      type: String
+    },
     email: {
       type: String
     },
@@ -21,8 +24,8 @@ const laporanSchema = new mongoose.Schema(
     message: {
       type: String
     },
-    isPending: {
-      type: Boolean
+    status: {
+      type: String
     },
     infrastucture: {
       type: String
@@ -30,14 +33,14 @@ const laporanSchema = new mongoose.Schema(
     breakage: {
       type: String
     },
-    isCompleted: {
-      type: Boolean
-    },
     score: {
       type: Number
     },
     completed_date: {
       type: Date
+    },
+    image: {
+      type: String
     }
   },
   { timestamps: true }

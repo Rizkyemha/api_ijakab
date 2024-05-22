@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "image-js": "^0.35.5",
     "joi": "^17.12.0",
     "jose": "^5.2.0",
     "moment": "^2.30.1",
@@ -30,6 +31,7 @@
     "nodemon": "^3.0.3",
     "pino": "^8.17.2",
     "pino-pretty": "^10.3.1",
+    "sharp": "^0.33.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

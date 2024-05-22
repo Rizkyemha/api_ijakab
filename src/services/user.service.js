@@ -15,6 +15,11 @@ const getAuthUser = async (payload) => {
       logger.info(`login admin failed - ${error.message}`)
       return null
     })
+
+  if (!AuthUser) {
+    return AuthUser
+  }
+
   const { _id } = AuthUser
   return String(_id)
 }

@@ -12,8 +12,8 @@ const app = express()
 const port = CONFIG.PORT
 
 // parse body request
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ limit: '25mb', extended: true }))
+app.use(bodyParser.json({ limit: '25mb', extended: true }))
 
 // cors access handler
 app.use(cors())

@@ -16,6 +16,8 @@
     "array-callback-return": "off",
     "n/handle-callback-err": "off",
     "no-unused-expressions": "off",
-    "no-unneeded-ternary": "off"
+    "no-unneeded-ternary": "off",
+    "space-before-function-paren": "off",
+    "camelcase": "off"
   }
 }
